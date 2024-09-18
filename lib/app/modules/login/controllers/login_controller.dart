@@ -26,7 +26,48 @@ class LoginController extends GetxController {
 
         isLoading.value = false;
 
-        Get.offAllNamed(Routes.HOME);
+        if (userCredential.user!.emailVerified == true) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          print("User belum terverifikasi dan tidak dapat login");
+          Get.defaultDialog(
+            title: "Belum terverifikasi",
+            middleText: "Apakah kamu ingin mengirim email verifikasi lagi?",
+            actions: [
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[600]),
+                  onPressed: () => Get.back,
+                  child: const Text(
+                    "TIDAK",
+                    style: TextStyle(color: Colors.white),
+                  )),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[600]),
+                  onPressed: () async {
+                    try {
+                      await userCredential.user!.sendEmailVerification();
+                      print("Berhasil kirim link email ke inbox");
+                      Get.back();
+                      Get.snackbar("Berhasil", "Mohon cek inbox email");
+                    } catch (e) {
+                      print(e);
+                      Get.back();
+                      Get.snackbar("Terjadi Kesalahan",
+                          "Terlalu banyak mengirim verifikasi");
+                    }
+                  },
+                  child: const Text(
+                    "KIRIM LAGI DONG",
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ],
+          );
+
+          Get.snackbar("Terjadi Kesalahan",
+              "Mohon cek inbox email anda untuk verifikasi");
+        }
       } on FirebaseAuthException catch (e) {
         isLoading.value = false;
 

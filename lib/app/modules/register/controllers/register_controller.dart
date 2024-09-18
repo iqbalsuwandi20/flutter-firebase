@@ -25,6 +25,8 @@ class RegisterController extends GetxController {
 
         isLoading.value = false;
 
+        await userCredential.user!.sendEmailVerification();
+
         Get.offAllNamed(Routes.LOGIN);
       } on FirebaseAuthException catch (e) {
         isLoading.value = false;
