@@ -14,28 +14,30 @@ class LoginController extends GetxController {
   RxBool isLoading = false.obs;
 
   void login() async {
-    try {
-      isLoading.value = true;
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: emailC.text,
-        password: passC.text,
-      );
+    if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
+      try {
+        isLoading.value = true;
+        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: emailC.text,
+          password: passC.text,
+        );
 
-      print(userCredential);
+        print(userCredential);
 
-      isLoading.value = false;
+        isLoading.value = false;
 
-      Get.offAllNamed(Routes.HOME);
-    } on FirebaseAuthException catch (e) {
-      isLoading.value = false;
+        Get.offAllNamed(Routes.HOME);
+      } on FirebaseAuthException catch (e) {
+        isLoading.value = false;
 
-      print(e.code);
+        print(e.code);
 
-      // if (e.code == "user-not-found") {
-      //   print("Tidak ditemukan pengguna email tersebut");
-      // } else if (e.code == "wrong-passowrd") {
-      //   print("Kata sandi yang diberikan tersebut salah.");
-      // }
+        // if (e.code == "user-not-found") {
+        //   print("Tidak ditemukan pengguna email tersebut");
+        // } else if (e.code == "wrong-passowrd") {
+        //   print("Kata sandi yang diberikan tersebut salah.");
+        // }
+      }
     }
   }
 }

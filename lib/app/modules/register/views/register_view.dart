@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
-import '../controllers/login_controller.dart';
+import '../controllers/register_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+class RegisterView extends GetView<RegisterController> {
+  const RegisterView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
         title: const Text(
-          'Login',
+          'Register',
           style: TextStyle(color: Colors.white),
         ),
         leading: const SizedBox(),
@@ -51,13 +51,13 @@ class LoginView extends GetView<LoginController> {
               return ElevatedButton(
                 onPressed: () {
                   if (controller.isLoading.isFalse) {
-                    controller.login();
+                    controller.register();
                   }
                 },
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.blue[600]),
                 child: Text(
-                  controller.isLoading.isFalse ? "MASUK" : "LAGI PROSES..",
+                  controller.isLoading.isFalse ? "BUAT AKUN" : "LAGI PROSES..",
                   style: const TextStyle(color: Colors.white),
                 ),
               );
@@ -65,10 +65,10 @@ class LoginView extends GetView<LoginController> {
           ),
           TextButton(
               onPressed: () {
-                Get.toNamed(Routes.REGISTER);
+                Get.toNamed(Routes.LOGIN);
               },
               child: Text(
-                "Buat Akun?",
+                "Sudah Punya Akun?",
                 style: TextStyle(
                   color: Colors.blue[600],
                   fontWeight: FontWeight.bold,
