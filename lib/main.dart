@@ -17,6 +17,7 @@ void main() async {
     GetMaterialApp(
       title: "Application",
       initialRoute: AppPages.INITIAL,
+      debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
     ),
   );
