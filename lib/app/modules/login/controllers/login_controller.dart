@@ -13,10 +13,14 @@ class LoginController extends GetxController {
 
   RxBool isLoading = false.obs;
 
+  void errorMessage(String msg) {
+    Get.snackbar("Terjadi Kesalahan", msg);
+  }
+
   void login() async {
     if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
+      isLoading.value = true;
       try {
-        isLoading.value = true;
         UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: emailC.text,
           password: passC.text,
@@ -73,12 +77,16 @@ class LoginController extends GetxController {
 
         print(e.code);
 
+        errorMessage(e.code);
+
         // if (e.code == "user-not-found") {
         //   print("Tidak ditemukan pengguna email tersebut");
         // } else if (e.code == "wrong-passowrd") {
         //   print("Kata sandi yang diberikan tersebut salah.");
         // }
       }
+    } else {
+      errorMessage("Email dan Kata Sandi harus di isi");
     }
   }
 }

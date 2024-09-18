@@ -12,6 +12,10 @@ class RegisterController extends GetxController {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  void errorMessage(String msg) {
+    Get.snackbar("Terjadi Kesalahan", msg);
+  }
+
   void register() async {
     if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
       isLoading.value = true;
@@ -31,6 +35,8 @@ class RegisterController extends GetxController {
       } on FirebaseAuthException catch (e) {
         isLoading.value = false;
         print(e.code);
+
+        errorMessage(e.code);
         // if (e.code == "weak-password") {
         //   print("password provided is too weak");
         // } else if (e.code == "email-already-in-use") {
@@ -39,7 +45,10 @@ class RegisterController extends GetxController {
       } catch (e) {
         isLoading.value = false;
         print(e);
+        errorMessage("$e");
       }
+    } else {
+      errorMessage("Email dan Kata Sandi harus di isi");
     }
   }
 }

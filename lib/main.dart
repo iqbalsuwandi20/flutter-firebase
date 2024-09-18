@@ -24,7 +24,9 @@ void main() async {
           }
           return GetMaterialApp(
             title: "Application",
-            initialRoute: snap.data != null ? Routes.HOME : AppPages.INITIAL,
+            initialRoute: snap.data != null && snap.data!.emailVerified == true
+                ? Routes.HOME
+                : AppPages.INITIAL,
             debugShowCheckedModeBanner: false,
             getPages: AppPages.routes,
           );
