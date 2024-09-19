@@ -13,6 +13,8 @@ class ProfileController extends GetxController {
   TextEditingController nameC = TextEditingController();
   TextEditingController phoneC = TextEditingController();
 
+  RxBool isLoading = false.obs;
+
   void logout() async {
     try {
       await auth.signOut();
@@ -34,5 +36,22 @@ class ProfileController extends GetxController {
       Get.snackbar("TERJADI KESALAHAN", "Tidak dapat menampilkan data anda");
     }
     return null;
+  }
+
+  void updateProfile() async {
+    try {
+      isLoading.value = true;
+      String uid = auth.currentUser!.uid;
+      await firestore.collection("users").doc(uid).update({
+        "name": nameC.text,
+        "phone": phoneC.text,
+      });
+      isLoading.value = false;
+
+      Get.snackbar("BERHASIL", "Berhasil mengganti data anda");
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar("TERJADI KESALAHAN", "Tidak dapat ganti data");
+    }
   }
 }

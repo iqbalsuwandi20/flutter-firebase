@@ -82,6 +82,7 @@ class ProfileView extends GetView<ProfileController> {
                 TextField(
                   autocorrect: false,
                   controller: controller.phoneC,
+                  keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     labelText: "Nomor HP",
@@ -108,14 +109,25 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 50),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[600]),
-                    onPressed: () {},
-                    child: Text(
-                      "GANTI PROFIL",
-                      style: const TextStyle(color: Colors.white),
-                    ))
+                Obx(
+                  () {
+                    return ElevatedButton(
+                      onPressed: () {
+                        if (controller.isLoading.isFalse) {
+                          controller.updateProfile();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[600]),
+                      child: Text(
+                        controller.isLoading.isFalse
+                            ? "GANTI PROFIL"
+                            : "LAGI PROSES..",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+                ),
               ],
             );
           }
