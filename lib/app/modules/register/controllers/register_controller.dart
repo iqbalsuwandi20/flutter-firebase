@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,8 @@ import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 
 class RegisterController extends GetxController {
+  TextEditingController nameC = TextEditingController();
+  TextEditingController phoneC = TextEditingController();
   TextEditingController emailC = TextEditingController();
   TextEditingController passC = TextEditingController();
 
@@ -12,13 +15,17 @@ class RegisterController extends GetxController {
   RxBool isHidden = true.obs;
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void errorMessage(String msg) {
     Get.snackbar("Terjadi Kesalahan", msg);
   }
 
   void register() async {
-    if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
+    if (nameC.text.isNotEmpty &&
+        phoneC.text.isNotEmpty &&
+        emailC.text.isNotEmpty &&
+        passC.text.isNotEmpty) {
       isLoading.value = true;
       try {
         UserCredential userCredential =
@@ -31,6 +38,14 @@ class RegisterController extends GetxController {
         isLoading.value = false;
 
         await userCredential.user!.sendEmailVerification();
+
+        await firestore.collection("users").doc(userCredential.user!.uid).set({
+          "name": nameC.text,
+          "phone": phoneC.text,
+          "email": emailC.text,
+          "uid": userCredential.user!.uid,
+          "createdAt": DateTime.now().toIso8601String(),
+        });
 
         Get.offAllNamed(Routes.LOGIN);
       } on FirebaseAuthException catch (e) {
@@ -49,7 +64,7 @@ class RegisterController extends GetxController {
         errorMessage("$e");
       }
     } else {
-      errorMessage("Email dan Kata Sandi harus di isi");
+      errorMessage("Semua form harus di isi");
     }
   }
 }

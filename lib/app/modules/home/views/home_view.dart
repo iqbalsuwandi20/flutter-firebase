@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -17,19 +17,28 @@ class HomeView extends GetView<HomeController> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                controller.logout();
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
-                color: Colors.white,
-              )),
+            onPressed: () {
+              Get.toNamed(Routes.PROFILE);
+            },
+            icon: const Icon(
+              Icons.person_2_outlined,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       body: const Center(
         child: Text(
           'HomeView is working',
           style: TextStyle(fontSize: 20),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.blue[600],
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
         ),
       ),
     );
