@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/app_pages.dart';
 
 class LoginController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  TextEditingController emailC =
-      TextEditingController(text: "iqbalsuwandi20@gmail.com");
-  TextEditingController passC = TextEditingController(text: "iqbalganteng20");
+  TextEditingController emailC = TextEditingController();
+  TextEditingController passC = TextEditingController();
 
   RxBool isLoading = false.obs;
+  RxBool isHidden = true.obs;
+  RxBool rememberMe = false.obs;
+
+  final box = GetStorage();
 
   void errorMessage(String msg) {
     Get.snackbar("Terjadi Kesalahan", msg);
@@ -31,6 +35,16 @@ class LoginController extends GetxController {
         isLoading.value = false;
 
         if (userCredential.user!.emailVerified == true) {
+          if (box.read("rememberMe") != null) {
+            await box.remove("rememberMe");
+          }
+          if (rememberMe.isTrue) {
+            await box.write("rememberMe", {
+              "email": emailC.text,
+              "password": passC.text,
+            });
+          }
+
           Get.offAllNamed(Routes.HOME);
         } else {
           print("User belum terverifikasi dan tidak dapat login");

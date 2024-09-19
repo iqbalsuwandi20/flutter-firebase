@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+  LoginView({super.key});
+
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
+    if (box.read("rememberMe") != null) {
+      controller.emailC.text = box.read("rememberMe")["email"];
+      controller.passC.text = box.read("rememberMe")["password"];
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
@@ -33,17 +40,51 @@ class LoginView extends GetView<LoginController> {
                 border: const OutlineInputBorder()),
           ),
           const SizedBox(height: 20),
-          TextField(
-            controller: controller.passC,
-            autocorrect: false,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.key_off_outlined,
-                  color: Colors.blue[600],
+          Obx(
+            () {
+              return TextField(
+                controller: controller.passC,
+                obscureText: controller.isHidden.value,
+                autocorrect: false,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.key_off_outlined,
+                      color: Colors.blue[600],
+                    ),
+                    labelText: "Kata Sandi",
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          controller.isHidden.toggle();
+                        },
+                        icon: Icon(
+                          controller.isHidden.isTrue
+                              ? Icons.remove_red_eye_outlined
+                              : Icons.remove_red_eye_rounded,
+                          color: Colors.blue[600],
+                        )),
+                    border: const OutlineInputBorder()),
+              );
+            },
+          ),
+          Obx(
+            () {
+              return CheckboxListTile(
+                value: controller.rememberMe.value,
+                onChanged: (value) {
+                  controller.rememberMe.toggle();
+                },
+                title: Text(
+                  "Ingatkan Saya",
+                  style: TextStyle(
+                    color: Colors.blue[600],
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                labelText: "Kata Sandi",
-                border: const OutlineInputBorder()),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Colors.blue[600],
+              );
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
