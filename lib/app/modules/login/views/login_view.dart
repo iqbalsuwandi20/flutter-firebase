@@ -45,6 +45,25 @@ class LoginView extends GetView<LoginController> {
                 labelText: "Kata Sandi",
                 border: const OutlineInputBorder()),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 150,
+                child: TextButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.RESET_PASSWORD);
+                    },
+                    child: Text(
+                      "Reset Kata Sandi?",
+                      style: TextStyle(
+                        color: Colors.blue[600],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ),
+            ],
+          ),
           const SizedBox(height: 50),
           Obx(
             () {
