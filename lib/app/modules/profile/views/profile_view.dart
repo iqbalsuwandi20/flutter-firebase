@@ -92,6 +92,34 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                Obx(
+                  () {
+                    return TextField(
+                      controller: controller.passC,
+                      obscureText: controller.isHidden.value,
+                      autocorrect: false,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.key_off_outlined,
+                            color: Colors.blue[600],
+                          ),
+                          labelText: "Kata Sandi Baru",
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.isHidden.toggle();
+                              },
+                              icon: Icon(
+                                controller.isHidden.isTrue
+                                    ? Icons.remove_red_eye_outlined
+                                    : Icons.remove_red_eye_rounded,
+                                color: Colors.blue[600],
+                              )),
+                          border: const OutlineInputBorder()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
                 Text(
                   "Akun anda dibuat:",
                   style: TextStyle(

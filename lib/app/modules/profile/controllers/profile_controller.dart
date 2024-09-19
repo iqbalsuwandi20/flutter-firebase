@@ -12,8 +12,10 @@ class ProfileController extends GetxController {
   TextEditingController emailC = TextEditingController();
   TextEditingController nameC = TextEditingController();
   TextEditingController phoneC = TextEditingController();
+  TextEditingController passC = TextEditingController();
 
   RxBool isLoading = false.obs;
+  RxBool isHidden = true.obs;
 
   void logout() async {
     try {
@@ -39,19 +41,36 @@ class ProfileController extends GetxController {
   }
 
   void updateProfile() async {
-    try {
-      isLoading.value = true;
-      String uid = auth.currentUser!.uid;
-      await firestore.collection("users").doc(uid).update({
-        "name": nameC.text,
-        "phone": phoneC.text,
-      });
-      isLoading.value = false;
+    if (emailC.text.isNotEmpty &&
+        nameC.text.isNotEmpty &&
+        phoneC.text.isNotEmpty) {
+      try {
+        isLoading.value = true;
+        String uid = auth.currentUser!.uid;
+        await firestore.collection("users").doc(uid).update({
+          "name": nameC.text,
+          "phone": phoneC.text,
+        });
 
-      Get.snackbar("BERHASIL", "Berhasil mengganti data anda");
-    } catch (e) {
-      isLoading.value = false;
-      Get.snackbar("TERJADI KESALAHAN", "Tidak dapat ganti data");
+        if (passC.text.isNotEmpty) {
+          await auth.currentUser!.updatePassword(passC.text);
+          await auth.signOut();
+
+          isLoading.value = false;
+
+          Get.offAllNamed(Routes.LOGIN);
+        } else {
+          isLoading.value = false;
+        }
+
+        // Get.snackbar("BERHASIL", "Berhasil mengganti data anda");
+      } catch (e) {
+        isLoading.value = false;
+        Get.snackbar("TERJADI KESALAHAN", "Tidak dapat ganti data");
+      }
+    } else {
+      Get.snackbar(
+          "TERJADI KESALAHAN", "Data yang ingin dirubah tidak boleh kosong");
     }
   }
 }
