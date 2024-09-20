@@ -39,7 +39,7 @@ class HomeView extends GetView<HomeController> {
               );
             }
 
-            if (snapshot.data?.docs.length == null || snapshot.data == null) {
+            if (snapshot.data!.docs.isEmpty || snapshot.data == null) {
               return const Center(
                 child: Text(
                   "Belum ada data",
@@ -74,7 +74,9 @@ class HomeView extends GetView<HomeController> {
                     style: TextStyle(color: Colors.blue[600]),
                   ),
                   trailing: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.deleteNote(docNote.id);
+                      },
                       icon: Icon(
                         Icons.delete_forever_outlined,
                         color: Colors.blue[600],
