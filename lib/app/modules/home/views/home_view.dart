@@ -34,7 +34,9 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed(Routes.ADD_NOTE);
+        },
         backgroundColor: Colors.blue[600],
         child: const Icon(
           Icons.add,
