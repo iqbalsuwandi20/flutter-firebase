@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../routes/app_pages.dart';
 
@@ -16,6 +17,8 @@ class ProfileController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isHidden = true.obs;
+
+  XFile? image;
 
   void logout() async {
     try {
@@ -72,5 +75,22 @@ class ProfileController extends GetxController {
       Get.snackbar(
           "TERJADI KESALAHAN", "Data yang ingin dirubah tidak boleh kosong");
     }
+  }
+
+  void pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      update();
+    } else {
+      Get.snackbar("TERJADI KESALAHAN", "Anda harus memilih gambar");
+    }
+  }
+
+  void resetImage() async {
+    image = null;
+
+    update();
   }
 }

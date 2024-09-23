@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -135,6 +137,85 @@ class ProfileView extends GetView<ProfileController> {
                   style: TextStyle(
                     color: Colors.blue[600],
                   ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Foto Profil:",
+                  style: TextStyle(
+                      color: Colors.blue[600], fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                GetBuilder<ProfileController>(
+                  builder: (c) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        snapshot.data?["profilePicture"] != null
+                            ? Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.grey[600],
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      snapshot.data!["profilePicture"],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : controller.image != null
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          color: Colors.grey[600],
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                              File(
+                                                controller.image!.path,
+                                              ),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          controller.resetImage();
+                                        },
+                                        child: Text(
+                                          "Hapus Gambar",
+                                          style: TextStyle(
+                                            color: Colors.blue[600],
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Text(
+                                    "Belum di pilih",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                        TextButton(
+                            onPressed: () {
+                              controller.pickImage();
+                            },
+                            child: Text(
+                              "Pilih Gambar",
+                              style: TextStyle(
+                                color: Colors.blue[600],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 50),
                 Obx(
