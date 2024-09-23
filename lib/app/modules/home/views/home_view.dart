@@ -17,15 +17,30 @@ class HomeView extends GetView<HomeController> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.toNamed(Routes.PROFILE);
-            },
-            icon: const Icon(
-              Icons.person_2_outlined,
-              color: Colors.white,
-            ),
-          ),
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: controller.streamNameProfile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircleAvatar(
+                    backgroundColor: Colors.grey[400],
+                  );
+                }
+                Map<String, dynamic>? data = snapshot.data!.data();
+
+                return GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.PROFILE);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[400],
+                    backgroundImage: NetworkImage(data?["profilePicture"] !=
+                            null
+                        ? data!["profilePicture"]
+                        : "https://ui-avatars.com/api/?name=${data!["name"]}"),
+                  ),
+                );
+              }),
+          const SizedBox(width: 20),
         ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
