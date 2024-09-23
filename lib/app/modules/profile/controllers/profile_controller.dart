@@ -21,6 +21,7 @@ class ProfileController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isHidden = true.obs;
+  RxBool profile = false.obs;
 
   XFile? image;
 
@@ -39,6 +40,8 @@ class ProfileController extends GetxController {
       String uid = auth.currentUser!.uid;
       DocumentSnapshot<Map<String, dynamic>> docUser =
           await firestore.collection("users").doc(uid).get();
+
+      profile.value = true;
 
       return docUser.data();
     } catch (e) {
@@ -112,5 +115,23 @@ class ProfileController extends GetxController {
     image = null;
 
     update();
+  }
+
+  void clearProfile() async {
+    try {
+      String uid = auth.currentUser!.uid;
+
+      await firestore.collection("users").doc(uid).update({
+        "profilePicture": FieldValue.delete(),
+      });
+
+      Get.back();
+
+      profile.value = false;
+
+      update();
+    } catch (e) {
+      Get.snackbar("TERJADI KESALAHAN", "Tidak dapat menghapus gambar profil");
+    }
   }
 }

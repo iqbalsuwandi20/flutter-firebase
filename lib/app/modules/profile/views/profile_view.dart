@@ -183,20 +183,72 @@ class ProfileView extends GetView<ProfileController> {
                                   ),
                                 ],
                               )
-                            : snapshot.data?["profilePicture"] != null
-                                ? Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Colors.grey[600],
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          snapshot.data!["profilePicture"],
+                            : snapshot.data?["profilePicture"] != null &&
+                                    c.profile.isTrue
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          color: Colors.grey[600],
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              snapshot.data!["profilePicture"],
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                        fit: BoxFit.cover,
                                       ),
-                                    ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Get.defaultDialog(
+                                              title:
+                                                  "HAPUS GAMBAR SECARA PERMANEN",
+                                              middleText:
+                                                  "Yakin untuk menghapus foto profil anda?",
+                                              actions: [
+                                                OutlinedButton(
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .blue[600]),
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child: const Text(
+                                                      "KEMBALI",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .blue[600]),
+                                                    onPressed: () {
+                                                      controller.clearProfile();
+                                                    },
+                                                    child: const Text(
+                                                      "YA",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                              ]);
+                                        },
+                                        child: Text(
+                                          "Hapus Gambar Permanen",
+                                          style: TextStyle(
+                                            color: Colors.blue[600],
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   )
                                 : const Text(
                                     "Belum di pilih",
