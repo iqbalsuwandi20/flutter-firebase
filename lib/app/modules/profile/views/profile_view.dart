@@ -150,53 +150,53 @@ class ProfileView extends GetView<ProfileController> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        snapshot.data?["profilePicture"] != null
-                            ? Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: Colors.grey[600],
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      snapshot.data!["profilePicture"],
+                        controller.image != null
+                            ? Column(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.grey[600],
+                                      image: DecorationImage(
+                                        image: FileImage(
+                                          File(
+                                            controller.image!.path,
+                                          ),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  TextButton(
+                                    onPressed: () {
+                                      controller.resetImage();
+                                    },
+                                    child: Text(
+                                      "Hapus Gambar",
+                                      style: TextStyle(
+                                        color: Colors.blue[600],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               )
-                            : controller.image != null
-                                ? Column(
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          color: Colors.grey[600],
-                                          image: DecorationImage(
-                                            image: FileImage(
-                                              File(
-                                                controller.image!.path,
-                                              ),
-                                            ),
-                                            fit: BoxFit.cover,
-                                          ),
+                            : snapshot.data?["profilePicture"] != null
+                                ? Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.grey[600],
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          snapshot.data!["profilePicture"],
                                         ),
+                                        fit: BoxFit.cover,
                                       ),
-                                      TextButton(
-                                        onPressed: () {
-                                          controller.resetImage();
-                                        },
-                                        child: Text(
-                                          "Hapus Gambar",
-                                          style: TextStyle(
-                                            color: Colors.blue[600],
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   )
                                 : const Text(
                                     "Belum di pilih",
